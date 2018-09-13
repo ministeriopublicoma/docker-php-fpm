@@ -3,7 +3,7 @@ MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
 COPY assets/php.ini /usr/local/etc/php/
-RUN apt-get update
+RUN apt-get update \
     && apt-get install --no-install-recommends -y \
         git \
         sudo \
