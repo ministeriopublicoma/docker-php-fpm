@@ -1,4 +1,4 @@
-FROM php:7.2.9-fpm
+FROM php:7.2.12-fpm
 MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
@@ -21,6 +21,8 @@ RUN apt-get update \
         build-essential \
         libaio1 \
         libldap2-dev \
+        smbclient \
+    && sed -i "s/syslog = 0/#syslog = 0/g" /etc/samba/smb.conf \
     && ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
     && ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so \
     && docker-php-ext-install -j$(nproc) pgsql pdo_pgsql pdo_mysql ldap xsl gettext mysqli \
@@ -41,6 +43,7 @@ RUN apt-get update \
     && docker-php-ext-install pdo_oci \
     && docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu \
     && docker-php-ext-install pdo_dblib \
+    && docker-php-ext-install bcmath \ 
     && git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached \
     && cd /usr/src/php/ext/memcached && git checkout -b php7 origin/php7 \
     && docker-php-ext-configure memcached && docker-php-ext-install memcached 
