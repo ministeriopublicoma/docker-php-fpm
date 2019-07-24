@@ -51,5 +51,6 @@ RUN apt-get update \
     && yes "yes" | pecl install -f -o igbinary-2.0.8 \
     && yes "yes" | pecl install -f -o redis-4.3.0 \
     && pecl install memcached-2.2.0 \
+    && docker-php-ext-enable lzf igbinary-2.0.8 redis-4.3.0 \
     && docker-php-ext-enable oci8 pdo_oci memcached
 
