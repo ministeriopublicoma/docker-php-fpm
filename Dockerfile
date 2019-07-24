@@ -1,4 +1,4 @@
-FROM php:7.3.4-fpm
+FROM php:7.3.7-fpm
 MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
