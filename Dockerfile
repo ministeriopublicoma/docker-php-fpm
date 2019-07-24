@@ -1,4 +1,4 @@
-FROM php:5.6.37-fpm
+FROM php:5.6.40-fpm
 MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
@@ -46,6 +46,10 @@ RUN apt-get update \
     && make install \
     && docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu \
     && docker-php-ext-install pdo_dblib \
+    && docker-php-ext-install bcmath \
+    && yes "no" | pecl install -f -o lzf \
+    && yes "yes" | pecl install -f -o igbinary-2.0.8 \
+    && yes "yes" | pecl install -f -o redis-4.3.0 \
     && pecl install memcached-2.2.0 \
     && docker-php-ext-enable oci8 pdo_oci memcached
 
