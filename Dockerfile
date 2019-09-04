@@ -1,4 +1,4 @@
-FROM php:7.3.7-fpm
+FROM php:7.3.9-fpm
 MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
@@ -45,6 +45,7 @@ RUN apt-get update \
     && docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu \
     && docker-php-ext-install pdo_dblib \
     && docker-php-ext-install bcmath \ 
+    && docker-php-ext-install soap \
     && yes "no" | pecl install -f -o lzf \
     && yes "yes" | pecl install -f -o igbinary msgpack redis \
     && pecl install -f -o --onlyreqdeps --nobuild memcached-3.1.3 \
@@ -54,6 +55,6 @@ RUN apt-get update \
     && make && make install \
     && docker-php-ext-enable memcached \
     && cd - \
-    && docker-php-ext-enable lzf igbinary msgpack redis \
+    && docker-php-ext-enable lzf igbinary msgpack redis soap \ 
     && docker-php-ext-enable memcached
 
