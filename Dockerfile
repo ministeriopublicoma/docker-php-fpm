@@ -1,4 +1,4 @@
-FROM php:7.3.9-fpm
+FROM php:7.4.0-fpm
 MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
@@ -17,6 +17,7 @@ RUN apt-get update \
         libxslt1-dev \
         libldb-dev \
         libzip-dev \
+        libzstd-dev \
         libmemcached-dev \
         freetds-dev \        
         build-essential \
@@ -29,7 +30,7 @@ RUN apt-get update \
     && ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
     && ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so \
     && docker-php-ext-install -j$(nproc) pgsql pdo_pgsql pdo_mysql ldap xsl gettext mysqli \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd intl zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && chmod +x /usr/local/bin/composer \
@@ -55,6 +56,6 @@ RUN apt-get update \
     && make && make install \
     && docker-php-ext-enable memcached \
     && cd - \
-    && docker-php-ext-enable lzf igbinary msgpack redis soap \ 
+    && docker-php-ext-enable lzf igbinary msgpack redis soap \
     && docker-php-ext-enable memcached
 
