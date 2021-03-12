@@ -1,4 +1,4 @@
-FROM php:7.4.0-fpm
+FROM php:8.0.3-fpm
 MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
@@ -49,7 +49,7 @@ RUN apt-get update \
     && docker-php-ext-install soap \
     && yes "no" | pecl install -f -o lzf \
     && yes "yes" | pecl install -f -o igbinary msgpack redis \
-    && pecl install -f -o --onlyreqdeps --nobuild memcached-3.1.3 \
+    && pecl install -f -o --onlyreqdeps --nobuild memcached-3.1.4 \
     && cd "$(pecl config-get temp_dir)/memcached" \
     && phpize \
     && ./configure --with-php-config=/usr/local/bin/php-config --with-libmemcached-dir --with-zlib-dir --with-system-fastlz=no --enable-memcached-igbinary=yes --enable-memcached-msgpack=yes --enable-memcached-json=yes --enable-memcached-protocol=no --enable-memcached-sasl=yes --enable-memcached-session=yes \
