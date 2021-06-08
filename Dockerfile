@@ -1,4 +1,4 @@
-FROM php:7.4.0-fpm
+FROM php:7.4.20-fpm
 MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
 
 COPY assets/oracle /opt/oracle/
@@ -29,7 +29,7 @@ RUN apt-get update \
     && sed -i "s/syslog = 0/#syslog = 0/g" /etc/samba/smb.conf \
     && ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
     && ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so \
-    && docker-php-ext-install -j$(nproc) pgsql pdo_pgsql pdo_mysql ldap xsl gettext mysqli \
+    && docker-php-ext-install -j$(nproc) pgsql pdo_pgsql pdo_mysql ldap xsl gettext mysqli xmlrpc opcache \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd intl zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -39,7 +39,7 @@ RUN apt-get update \
     && ln /opt/oracle/instantclient_12_2/libocci.so.12.1 /opt/oracle/instantclient_12_2/libocci.so \
     && echo /opt/oracle/instantclient_12_2 > /etc/ld.so.conf.d/oracle-instantclient.conf \
     && ldconfig \
-    && echo "instantclient,/opt/oracle/instantclient_12_2" | pecl install oci8 \
+    && echo "instantclient,/opt/oracle/instantclient_12_2" | pecl install oci8-2.2.0 \
     && docker-php-ext-configure pdo_oci \
        --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_2,12.2 \
     && docker-php-ext-install pdo_oci \
