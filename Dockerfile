@@ -1,5 +1,5 @@
-FROM php:7.4.20-fpm
-MAINTAINER Ricardo Coelho <rcoelho@mpma.mp.br>
+FROM php:7.4.33-fpm
+LABEL maintainer="Ricardo Coelho <rcoelho@mpma.mp.br>"
 
 COPY assets/oracle /opt/oracle/
 COPY assets/php.ini /usr/local/etc/php/
@@ -19,7 +19,7 @@ RUN apt-get update \
         libzip-dev \
         libzstd-dev \
         libmemcached-dev \
-        freetds-dev \        
+        freetds-dev \
         build-essential \
         libaio1 \
         libldap2-dev \
@@ -54,8 +54,9 @@ RUN apt-get update \
     && phpize \
     && ./configure --with-php-config=/usr/local/bin/php-config --with-libmemcached-dir --with-zlib-dir --with-system-fastlz=no --enable-memcached-igbinary=yes --enable-memcached-msgpack=yes --enable-memcached-json=yes --enable-memcached-protocol=no --enable-memcached-sasl=yes --enable-memcached-session=yes \
     && make && make install \
-    && docker-php-ext-enable memcached \
     && cd - \
     && docker-php-ext-enable lzf igbinary msgpack redis soap \
-    && docker-php-ext-enable memcached
-
+    && docker-php-ext-enable memcached \
+    && docker-php-ext-configure oci8 \
+       --with-oci8=instantclient,/opt/oracle/instantclient_12_2,12.2 \
+    && docker-php-ext-install oci8
